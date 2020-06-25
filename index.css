@@ -1,0 +1,35 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.title-game {
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 2em;
+}
+.game-frame{
+    width: 50em;
+    height: 40em;
+    background-color: lightgrey;
+    margin: 5em auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.game-box {
+    width: 20%;
+    height: 25%;
+    border: 1px solid red;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+.game-bo {
+    transform: rotateY(180deg);
+    background-color: black;
+}
+
+/*test*/
