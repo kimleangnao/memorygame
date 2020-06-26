@@ -7,7 +7,7 @@ Next Task:
     -bug like if you click fast enough, it will break this
     -we have to set some sort of mechanic to catch it
 */
-
+let cannotClickYet = false;
 
 var holdGameBox = [];
 
@@ -21,51 +21,11 @@ for (let i = 0; i < holdGameBox.length; i++){
 }
 
 
-var hold1 = "";
-var holdDivLast = "";
-var whatNum = 1;
+
+var holdFirstElement = "";
+
+var whatClick = 1;
 var completeFlip = [];
-var counter = 0;
-
-for (let i = 0; i < holdGameBox.length; i++){
-    holdGameBox[i].holdGB.addEventListener("click", function (){
-        holdGameBox[i].holdGB.style.transform = "rotateY(180deg)";
-        holdGameBox[i].holdGB.src = holdGameBox[i].image;
-        
-        if (completeFlip.includes(holdGameBox[i]) || hold1 == holdGameBox[i]){
-            console.log("already match or clicked!")
-        }else {
-            if(whatNum == 1 ){
-                hold1 =  holdGameBox[i].holdGB.src;
-                holdDivLast = holdGameBox[i].holdGB;
-                whatNum += 1;
-                counter += 1;
-            }else if (hold1 == holdGameBox[i].holdGB.src) {
-                completeFlip.push(holdGameBox[i].holdGB);
-                completeFlip.push(holdDivLast);
-                hold1 = "";
-                whatNum  = 1;
-                holdDivLast = "";
-                counter += 1;
-            }else {
-                setTimeout(function callbackS(){
-                    holdDivLast.style.transform = "rotateY(0deg)";
-                    holdDivLast.src = "./images/q.png";
-                    holdDivLast.style.background = "lightgrey";
-                    holdGameBox[i].holdGB.style.transform = "rotateY(0deg)";
-                    holdGameBox[i].holdGB.src = "./images/q.png";
-                    holdGameBox[i].holdGB.style.background = "lightgrey";
-                    hold1 = "";
-                    whatNum  = 1;
-                    holdDivLast = "";
-                    counter += 1;
-                }, 1000)
-            }
-        }  
-    });
-}
-
-
 
 
 /*Now to implement this to our project*/
@@ -90,8 +50,63 @@ for(let i = 0; i < holdGameBox.length; i++){
 }
 
 
+for (let i = 0; i < holdGameBox.length; i++){
+    holdGameBox[i].holdGB.addEventListener("click", function (){
+        if(!cannotClickYet){
+            holdGameBox[i].holdGB.style.transform = "rotateY(180deg)";
+            holdGameBox[i].holdGB.src = holdGameBox[i].image;
+            //holdGameBox[i] is whatever you are clicking on right now!
 
+            //first we check, is whatever you are clicking right now is in the already matched ?
+            //or is it the first one that you already clicked ?
+            if (completeFlip.includes(holdGameBox[i]) || holdFirstElement == holdGameBox[i]){
+                //matched or clicked!
+            }else {
+              //if not, then proceed to the next stage
+                //we want to know, is this first or second click
+                if(whatClick == 1){
+                    //this is the first click
+                    //we need variable to hold the current holdGameBox[i]
+                    holdFirstElement = holdGameBox[i];
+                    //make next click second click
+                    whatClick += 1;
+                }else if (whatClick == 2){
+                    //cannot click until everything done evaluating
+                    cannotClickYet = true;
+                    //this is the second click, we will reset the click to 1 after run whatever code
+                    //we would use the holdFirstElement to evaluate with this current holdGameBox[i]
+                    if(holdGameBox[i].image == holdFirstElement.image){
+                        //the image are match!
+                        completeFlip.push(holdGameBox[i]);
+                        completeFlip.push(holdFirstElement);
 
+                        //reset everything back after match
+                        cannotClickYet = false;
+                        whatClick = 1;
+                        holdFirstElement = "";
+                    }else{
+                        //if not match, flip back and reset
+                        setTimeout(function resetTheFlipTimeOut(){
+                            holdFirstElement.holdGB.style.transform = "rotateY(0deg)";
+                            holdFirstElement.holdGB.src = "./images/q.png";
+                            holdFirstElement.holdGB.style.background = "lightgrey";
+                            holdGameBox[i].holdGB.style.transform = "rotateY(0deg)";
+                            holdGameBox[i].holdGB.src = "./images/q.png";
+                            holdGameBox[i].holdGB.style.background = "lightgrey";
+
+                            //reset variable after not match
+                            whatClick = 1;
+                            holdFirstElement = "";
+                            cannotClickYet = false;
+                        }, 800);
+                    }
+                }
+            } 
+        }else{
+            //cannot click yet!
+        }
+    });
+}
 
 
 
