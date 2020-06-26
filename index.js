@@ -7,10 +7,14 @@ Next Task:
     -bug like if you click fast enough, it will break this
     -we have to set some sort of mechanic to catch it
 */
+
 let cannotClickYet = false;
-
-var holdGameBox = [];
-
+let absoluteWin = document.querySelector(".absolute-win");
+let holdGameBox = [];
+let holdFirstElement = "";
+let whatClick = 1;
+let counter = 0;
+let completeFlip = [];
 for ( let i = 1; i < 21 ; i++){
     var holdGB = "gameBox" + i;
     holdGameBox.push({holdGB:"", "image":""});
@@ -22,10 +26,7 @@ for (let i = 0; i < holdGameBox.length; i++){
 
 
 
-var holdFirstElement = "";
 
-var whatClick = 1;
-var completeFlip = [];
 
 
 /*Now to implement this to our project*/
@@ -84,6 +85,8 @@ for (let i = 0; i < holdGameBox.length; i++){
                         cannotClickYet = false;
                         whatClick = 1;
                         holdFirstElement = "";
+                        counter += 1;
+                        console.log("c:", counter);
                     }else{
                         //if not match, flip back and reset
                         setTimeout(function resetTheFlipTimeOut(){
@@ -110,9 +113,11 @@ for (let i = 0; i < holdGameBox.length; i++){
 
 
 
-
-
-
-
-
+let checkWinInterval = setInterval(function winCheckInterval(){
+    console.log("interval Running!")
+    if(counter == 10){
+        absoluteWin.style.visibility = "visible";
+        clearInterval(checkWinInterval);
+    }
+}, 100)
 
